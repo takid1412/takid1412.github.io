@@ -1,0 +1,246 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Merry Christmas</title>
+<meta name="description" content="Merry Christmas and Happy New Year">
+<meta name="thumbnail" content="http://i.imgur.com/aBh7BW6.jpg" />
+
+<meta property="og:url"                content="http://takid1412.github.io/lyric/" />
+<meta property="og:type"               content="article" />
+<meta property="og:title"              content="Sync Lyric With music" />
+<meta property="og:description"        content="Just Something" />
+<meta property="og:image"              content="http://i.imgur.com/aBh7BW6.jpg" />
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+@font-face {
+    font-family: Font;
+    src: url(assets/Love_and_Passion.ttf);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+  box-sizing: border-box;
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+#controls {
+  padding: 10px;
+  color: #fff;
+  padding-bottom: 20px;
+}
+
+#controls span {
+  text-transform: uppercase;
+  padding: 0 5px;
+}
+
+#controls span:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+#player {
+	position: fixed; 
+	z-index: -99; 
+	width: 100%; 
+	height: 100%
+}
+
+#lyric {
+  padding: 30px;
+  background: transparent;
+  font-family: Font;
+  font-size: 30px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  border-top: 1px solid red;
+}
+
+#anchor {
+  position: absolute;
+  top: -41px;
+  font-family: Font;
+  left: 0;
+  color: red;
+}
+
+#lyric p {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  left: 0;
+}
+</style>
+</head>
+<body>
+	<audio id="audio" src="assets/ThinkingOutLoud.mp3"></audio>
+  <div id="overlay">
+    <div id="controls">
+      <span id="play">play</span>
+      <span id="pause">pause</span>
+      <span id="stop">stop</span>
+    </div>
+    <div id="lyric">
+      <span id="anchor">o</span>
+    </div>
+  </div>
+	<div id="player"></div>
+
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '100%',
+          width: '100%',
+          playerVars: {
+          	'controls' : 0,
+          	'showinfo': 0,
+          	'autohide': 1,
+          	'modestbranding' : 1,
+          	'nologo': 1,
+          	'loop': 1,
+          	'playlist': 'OBk3ynRbtsw'
+          },
+          videoId: 'OBk3ynRbtsw',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange,
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+      	player.mute();
+        event.target.playVideo();
+        initElement();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) {
+            $("#audio")[0].play();
+        }
+      }
+    </script>
+	<audio loop controls hidden="hidden">
+		<source src="assets/music.mp3" type="audio/mpeg">
+	</audio>
+	<script type="text/javascript">
+  function initElement(){
+    var audio = $('audio');
+    $("#play").click(function(){
+      audio[0].play();
+      player.playVideo();
+    }).click();
+    $("#stop").click(function(){
+      audio[0].pause();
+      audio[0].currentTime = 0;
+      player.stopVideo();
+    });
+    $("#pause").click(function(){
+      audio[0].pause();
+      player.pauseVideo();
+    });
+
+    $.get("http://static.mp3.zdn.vn/lyrics/2015/6/7/6778717f03d1fdb86ce76033f1796e71_1074994438.lrc",
+      function(msg){
+        var data = parseLyric(msg);
+        init(data);
+      });
+
+    function parseLyric(msg){
+      var re = /\[([^\]]+)\]([^\n\r]*)/g,
+          match, params = [];
+
+      while (match = re.exec(msg)) {
+        if(!/^[\d\:\.]+$/.test(match[1])) continue;
+          params.push({
+            'time': hmsToSeconds(match[1]),
+            'text': match[2]==""?"♪ ♫ ♪ ♫":match[2]
+          });
+      }
+      return params;
+    }
+
+    function hmsToSeconds(str) {
+        var p = str.split(':'),
+            s = 0, m = 1;
+
+        while (p.length > 0) {
+            s += m * parseFloat(p.pop(), 10);
+            m *= 60;
+        }
+
+        return s;
+    }
+
+    function init(data){
+      var oldi = -1;
+      var ci = 0;
+      var stime = $("#time");
+      audio.on("timeupdate",function(){
+        var ct = getAudioCurrentTime();
+        updateTime(ct);
+        for(var i=0; i<data.length; i++){
+          if(ct>data[i].time && (i==data.length-1 || ct<data[i+1].time) && oldi!=i){
+            console.log(i,data[i]);
+            ci = i;
+            setLyric(i);
+          }
+        }
+      });
+
+      var anchor = $("#anchor");
+
+      function getAudioCurrentTime(){
+        return audio[0].currentTime;
+      }
+
+      function updateTime(time){
+        anchor.css({
+          left: time/audio[0].duration*100 + '%'}
+        );
+      }
+
+      function setLyric(i){
+        oldi = i;
+        var container = $("#lyric");
+        var current = container.find(".active");
+        current.removeClass("active").stop(true,true).animate({
+          opacity: 0,
+          top: 100},
+          1000, function() {
+          current.remove();
+        });;
+        var active = $("<p class='active'>"+data[i].text+"</p>");
+        active.appendTo(container).animate({
+          top: 30},
+          500);
+      }
+    }
+  }
+	</script>
+</body>
+</html>
