@@ -115,6 +115,7 @@ body {
 	margin-bottom: -10%;
 	width: 100%;
 	min-width: 750px;
+	z-index: -1;
 }
 </style>
 </head>
@@ -125,7 +126,7 @@ body {
 	</div>
 
 	<audio controls id="audioElement">
-		<source src="http://crossorigin.me/http://stream2.s2.mp3.zdn.vn/fsfsdfdsfdserwrwq3/14aae06cc0d6ba0db9942f154ca208b7/567ebf58/2012/06/23/c/d/cdeeee38e72fdd94700ea6b48ed6c11a.mp3" type="audio/mpeg">
+		<source src="assets/PopcornFunk.mp3" type="audio/mpeg">
 	</audio>
 	<div>
 	  <button onclick="document.getElementById('audioElement').play()">Play the Audio</button>
@@ -143,12 +144,14 @@ body {
 		audioElement.crossOrigin = "anonymous";
 		var audioSrc = audioCtx.createMediaElementSource(audioElement);
 		var analyser = audioCtx.createAnalyser();
-
+		analyser.fftSize = 1024;
+		var bufferLength = analyser.frequencyBinCount;
 		// Bind our analyser to the media element source.
 		audioSrc.connect(analyser);
 		audioSrc.connect(audioCtx.destination);
 
-		var frequencyData = new Uint8Array(200);
+		var frequencyData = new Uint8Array(bufferLength);
+		console.log(bufferLength);
 
 		function renderFrame() {
 		     requestAnimationFrame(renderFrame);
@@ -156,9 +159,26 @@ body {
 		     analyser.getByteFrequencyData(frequencyData);
 		     // render frame based on values in frequencyData
 		     // console.log(frequencyData);
+		     analyse(frequencyData);
 		  }
 		  renderFrame();
 		  audioElement.play();
+
+		  function analyse(data){
+		  	for(var i=0; i<data.length; i++){
+		  		data[i] = gain_to_db(data[i]);
+		  	}
+		  	var bass = 0;
+		  	for(var i=20; i<89; i++){
+		  		bass += data[i];
+		  	}
+		  	bass /= 70;
+		  	// console.log(bass);
+		  }
+
+		  function gain_to_db(num){
+		  	return 10 * Math.log(num)/Math.LN10;
+		  }
 
 	</script>
 	<script type="text/javascript">

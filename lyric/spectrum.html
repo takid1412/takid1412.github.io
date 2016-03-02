@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Loading and playing a sound with the Web Audio API</title>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        * {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .clearfix {
+          overflow: auto;
+          zoom: 1;
+        }
+        body {
+            background-image: url(assets/space.jpg);
+            background-size: cover;
+        }
+
+        #top {
+            padding: 30px 10px;
+            background-color: rgba(1,1,1,.5);
+        }
+
+        #title, #canvas-wrapper{
+            display: inline-block;
+            float: left;
+        }
+        #title{
+            width: 30%;
+        }
+        #canvas-wrapper {
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+
+<audio controls id="audioElement">
+        <source src="assets/PopcornFunk.mp3" type="audio/mpeg">
+    </audio>
+<div id="top" class="clearfix">
+    <div id="title">
+        <h2>CLGT</h2>
+    </div>
+    <div id="canvas-wrapper">
+        <canvas id="canvas" style=" width: 1000px;height: 325px;"></canvas>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    // create the audio context (chrome only for now)
+    // create the audio context (chrome only for now)
+    if (! window.AudioContext) {
+        if (! window.webkitAudioContext) {
+            alert('no audiocontext found');
+        }
+        window.AudioContext = window.webkitAudioContext;
+    }
+
+    var analyser,audioElement,frequencyData;
+
+    // get the context from the canvas to draw on
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext("2d");
+
+    ctx.canvas.width = 700;
+    ctx.canvas.height = 200;
+
+    window.addEventListener('resize', resizeCanvas, false);
+
+    function resizeCanvas() {
+            var newwidth = $("#canvas-wrapper").width();
+            ratio = 700/newwidth;
+            $("#canvas").css({
+                width: newwidth,
+                height: 200/ratio
+            });
+    }
+    resizeCanvas();
+
+    // create a gradient for the fill. Note the strange
+    // offset, since the gradient is calculated based on
+    // the canvas, not the specific element we draw
+    // var gradient = ctx.createLinearGradient(0,0,0,300);
+    // gradient.addColorStop(1,'#000000');
+    // gradient.addColorStop(0.75,'#ff0000');
+    // gradient.addColorStop(0.25,'#ffff00');
+    // gradient.addColorStop(0,'#ffffff');
+
+
+    // load the sound
+    setupAudioNodes();
+
+
+    function setupAudioNodes() {
+        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioElement = document.getElementById('audioElement');
+        audioElement.crossOrigin = "anonymous";
+        var audioSrc = audioCtx.createMediaElementSource(audioElement);
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 512;
+        var bufferLength = analyser.frequencyBinCount;
+        // Bind our analyser to the media element source.
+        frequencyData = new Uint8Array(bufferLength);
+        audioSrc.connect(analyser);
+        audioSrc.connect(audioCtx.destination);
+    }
+
+    function renderFrame() {
+        requestAnimationFrame(renderFrame);
+        // update data in frequencyData
+        analyser.getByteFrequencyData(frequencyData);
+        // render frame based on values in frequencyData
+        // console.log(frequencyData);
+        ctx.clearRect(0, 0, 700, 200);
+
+        // set the fill style
+        // ctx.fillStyle=gradient;
+        ctx.fillStyle = "#ffffff";
+        drawSpectrum(frequencyData);
+    }
+
+    renderFrame();
+    audioElement.play();
+
+    // $(audioElement).on("timeupdate",renderFrame);
+
+    function drawSpectrum(array) {
+        for ( var i = 0; i < (array.length); i++ ){
+            var value = array[i];
+            ctx.fillRect(i*3,200-value/5,2,200);
+            //  console.log([i,value])
+        }
+    };
+
+</script>
+
+</body>
+</html>
