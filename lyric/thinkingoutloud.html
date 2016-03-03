@@ -78,13 +78,13 @@
 #lyric p {
   position: absolute;
   top: 0px;
-  width: 100%;
+  max-width: 100%;
   left: 0;
 }
 </style>
 </head>
 <body>
-	<audio id="audio" src="assets/ThinkingOutLoud.mp3"></audio>
+	<audio id="audio" src="assets/ThinkingOutLoud.mp3" loop></audio>
   <div id="overlay">
     <div id="controls">
       <span id="play">play</span>
@@ -206,7 +206,6 @@
         updateTime(ct);
         for(var i=0; i<data.length; i++){
           if(ct>data[i].time && (i==data.length-1 || ct<data[i+1].time) && oldi!=i){
-            console.log(i,data[i]);
             ci = i;
             setLyric(i);
           }
@@ -221,7 +220,7 @@
 
       function updateTime(time){
         anchor.css({
-          left: time/audio[0].duration*100 + '%'}
+          left: Math.min(time/audio[0].duration*100,95) + '%'}
         );
       }
 
@@ -229,15 +228,28 @@
         oldi = i;
         var container = $("#lyric");
         var current = container.find(".active");
-        current.removeClass("active").stop(true,true).animate({
-          opacity: 0,
-          top: 100},
-          1000, function() {
-          current.remove();
-        });;
-        var active = $("<p class='active'>"+data[i].text+"</p>");
-        active.appendTo(container).animate({
-          top: 30},
+        if(current.length>0){
+          var top = current.offset().top;
+          var delta = Math.min(Math.max(0,window.innerHeight-container.offset().top-top-current.height()-50),100);
+          console.log(delta,window.innerHeight,top,current.height());
+          current.removeClass("active").stop(true,true).animate({
+            opacity: 0,
+            top: top+delta},
+            1000, function() {
+              current.remove();
+          });
+        }
+
+        var active = $("<p class='active'>"+data[i].text+"</p>").appendTo(container);
+
+        var maxH = window.innerHeight - container.offset().top - active.height() - 30;
+        var top1 = Math.floor(Math.random() * maxH);
+        var maxW = Math.max(window.innerWidth - active.width(),0);
+
+        var left1 = Math.floor(Math.random() * maxW);
+
+        active.css({'top':top1, 'left': left1}).animate({
+          top: top1+30},
           500);
       }
     }
