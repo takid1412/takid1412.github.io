@@ -231,7 +231,6 @@
         if(current.length>0){
           var top = current.offset().top;
           var delta = Math.min(Math.max(0,window.innerHeight-container.offset().top-top-current.height()-50),100);
-          console.log(delta,window.innerHeight,top,current.height());
           current.removeClass("active").stop(true,true).animate({
             opacity: 0,
             top: top+delta},
