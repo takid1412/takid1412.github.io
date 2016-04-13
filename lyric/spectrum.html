@@ -33,6 +33,15 @@
         }
         #canvas-wrapper {
             width: 70%;
+            position: relative;
+            border-bottom: 5px solid #826D6D;
+        }
+
+        #time-bar {
+            position: absolute;
+            bottom: -5px;
+            height: 5px;
+            background-color: #fff;
         }
 
         #title h2 {
@@ -141,6 +150,7 @@
     </div>
     <div id="canvas-wrapper">
         <canvas id="canvas" style=" width: 1000px;height: 325px;"></canvas>
+        <div id="time-bar"></div>
     </div>
 </div>
 
@@ -149,7 +159,12 @@
 </audio>
 
 <script type="text/javascript">
-
+    $("#audioElement").on("timeupdate",function(){
+        var audio = $(this).get(0);
+        $("#time-bar").stop(true,true).animate({
+          width: audio.currentTime/audio.duration * $("#canvas-wrapper").width() + "px"
+        },10);
+    });
     // create the audio context (chrome only for now)
     // create the audio context (chrome only for now)
     if (! window.AudioContext) {

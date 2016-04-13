@@ -1,0 +1,35 @@
+<html>
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/darkula.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/languages/java.min.js"></script>
+	<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+	<div id="code"> 
+	<pre>
+	<code class="android">
+	public static Bitmap overlay(Bitmap bmp1, Bitmap bmp2) {
+		Bitmap bmOverlay = Bitmap.createBitmap(bmp1.getWidth(), bmp1.getHeight(), bmp1.getConfig());
+		Canvas canvas = new Canvas(bmOverlay);
+		canvas.drawBitmap(bmp1, new Matrix(), null);
+		canvas.drawBitmap(bmp2, 0, 0, null);
+		return bmOverlay;
+	}
+	</code>
+	</pre>
+	</div>
+	<button>CLICK</button>
+	<textarea id="input" style="width:500px;height:300px"></textarea>
+	<textarea id="res" style="width:500px;height:300px"></textarea>
+	<script>
+	$("button").click(function(){
+		var t = $("#input").val();
+		$("#code code").html(t);
+		hljs.highlightBlock($("#code code")[0]);
+		$("#res").val('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/darkula.min.css"> \n'+$("#code").html());
+	});
+	</script>
+</body>
+</html>
