@@ -9,7 +9,7 @@
 <body>
 	<div id="code"> 
 	<pre>
-	<code class="android">
+	<code>
 	public static Bitmap overlay(Bitmap bmp1, Bitmap bmp2) {
 		Bitmap bmOverlay = Bitmap.createBitmap(bmp1.getWidth(), bmp1.getHeight(), bmp1.getConfig());
 		Canvas canvas = new Canvas(bmOverlay);
@@ -26,10 +26,13 @@
 	<script>
 	$("button").click(function(){
 		var t = $("#input").val();
-		$("#code code").html(t);
+		$("#code code").html(t.htmlEscape());
 		hljs.highlightBlock($("#code code")[0]);
 		$("#res").val('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/darkula.min.css"> \n'+$("#code").html());
 	});
+	String.prototype.htmlEscape = function() {
+		return $('<div/>').text(this.toString()).html();
+	  };
 	</script>
 </body>
 </html>
