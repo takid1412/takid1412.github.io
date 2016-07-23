@@ -1,0 +1,137 @@
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Teen's code</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<style>
+	.center {text-align: center;}
+	body {
+		background-color: #fff;
+		color: #111;
+		-webkit-transition: all .25s ease-in-out; /* Safari */
+    	transition: all .25s ease-in-out;
+	}
+	
+	.hard {
+		background-color: #111;
+		color: #eee;
+	}
+
+	.jumbotron {
+		-webkit-transition: all .25s ease-in-out; /* Safari */
+    	transition: all .25s ease-in-out;
+	}
+
+	.hard .jumbotron {
+		background-color: #222;
+	}
+	</style>
+</head>
+<body>
+	<div class="jumbotron center">
+    	<div class="container">
+        	<h1>This is teencode page.</h1>
+        	<p>Writed in a rainy day.</p>
+      	</div>
+    </div>
+    <div class="container">
+	    <div class="row">
+	    	<div class="col-xs-12">
+	    		<div class="center">
+	    			<div class="checkbox">
+					  <label>
+					    <input id="hard" type="checkbox" value="">
+					    GOD MODE
+					  </label>
+					</div>
+	    		</div>
+	    	</div>
+	    	<div class="col-xs-6">
+	    		<div class="form-group">
+				    <label>FROM</label>
+				    <textarea id="from" class="form-control" rows="5"></textarea>
+				</div>
+	    	</div>
+	    	<div class="col-xs-6">
+	    		<div class="form-group">
+				    <label>TO</label>
+				    <textarea id="to" class="form-control" rows="5"></textarea>
+				</div>
+	    	</div>
+	    </div>
+	</div>
+	<script>
+	(function(){
+		var from = document.getElementById("from");
+		var to = document.getElementById("to");
+
+		var hard = document.getElementById("hard");
+
+		from.oninput = function(){
+			to.value = teenify(from.value);
+		}
+
+		hard.onchange = function(){
+			if(hard.checked){
+				document.body.className = "hard";
+			}else{
+				document.body.className = ""
+			}
+		}
+
+		function teenify(text){
+			var org = [
+				"à", "á", "ạ", "ả", "ã", "â", "ầ", "ấ", "ậ", "ẩ", "ẫ", "ă", "ằ", "ắ", "ặ", "ẳ", "ẵ",
+				"è", "é", "ẹ", "ẻ", "ẽ", "ê", "ề", "ế", "ệ", "ể", "ễ",
+				"ì", "í", "ị", "ỉ", "ĩ",
+				"ò", "ó", "ọ", "ỏ", "õ", "ô", "ồ", "ố", "ộ", "ổ", "ỗ", "ơ", "ờ", "ớ", "ợ", "ở", "ỡ",
+				"ù", "ú", "ụ", "ủ", "ũ", "ư", "ừ", "ứ", "ự", "ử", "ữ",
+				"ỳ", "ý", "ỵ", "ỷ", "ỹ",
+				"đ"
+			];
+			var des = [
+				"a`", "a'", "a.", "a?", "a~", "a^", "a^`", "a^'", "a^.", "a^?", "a^~", "4", "4`", "4'", "4.", "4?", "4~",
+				"e`", "e'", "e.", "e?", "e~", "e^", "e^`", "e^'", "e^.", "e^?", "e^~",
+				"ì", "í", "ị", "ỉ", "ĩ",
+				"o`", "o'", "o.", "o?", "o~", "o^", "o^`", "o^'", "o^.", "o^?", "o^~", "o*", "o*`", "o*'", "o*.", "o*?", "o*~",
+				"u`", "u'", "u.", "u?", "u~", "u*", "u*`", "u*'", "u*.", "u*?", "u*~",
+				"y`", "y'", "y.", "y?", "y~",
+				"d"
+			];
+
+			var org_ = ["^tr","\\str","^ch","\\sch","^l","\\sl","^n","\\sn"];
+			var des_ = ["ch"," ch","tr"," tr","n"," n","l"," l"];
+
+			if(hard.checked){
+				var flag = {};
+				for(var i=0; i< org_.length; i++){
+					var re = new RegExp(org_[i],"gi");
+					while ((match = re.exec(text)) != null) {
+						if(!flag[i]) flag[i] = [];
+						flag[i].push(match.index);
+					}
+				}
+
+				for(var key in flag){
+					for(var i=0; i< flag[key].length; i++){
+						text = text.substring(0, flag[key][i]) + 
+           						des_[key] + 
+           						text.substring(flag[key][i]+des_[i].length, text.length);
+					}
+				}
+			}
+
+			for(var i=0; i< org.length; i++){
+				var re = new RegExp(org[i],"gi");
+				text = text.replace(re,des[i]);
+			}
+
+			return text;
+		}
+	})();
+	</script>
+</body>
+</html>
