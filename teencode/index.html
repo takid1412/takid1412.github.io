@@ -116,11 +116,13 @@
 					}
 				}
 
+				console.log(flag);
+
 				for(var key in flag){
 					for(var i=0; i< flag[key].length; i++){
 						text = text.substring(0, flag[key][i]) + 
            						des_[key] + 
-           						text.substring(flag[key][i]+des_[i].length, text.length);
+           						text.substring(flag[key][i]+des_[key].length, text.length);
 					}
 				}
 			}
