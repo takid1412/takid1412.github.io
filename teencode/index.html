@@ -75,6 +75,7 @@
 		}
 
 		hard.onchange = function(){
+			from.oninput();
 			if(hard.checked){
 				document.body.className = "hard";
 			}else{
