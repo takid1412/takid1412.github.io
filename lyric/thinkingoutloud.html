@@ -132,7 +132,7 @@
       // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
       	player.mute();
-        // event.target.playVideo();
+        event.target.playVideo();
         initElement();
       }
 
@@ -154,7 +154,7 @@
     $("#play").click(function(){
       audio[0].play();
       player.playVideo();
-    }).click();
+    });
     $("#stop").click(function(){
       audio[0].pause();
       audio[0].currentTime = 0;
