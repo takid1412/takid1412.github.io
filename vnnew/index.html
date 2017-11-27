@@ -1,0 +1,107 @@
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Vietnamese 2069</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<style>
+	.center {text-align: center;}
+	body {
+		background-color: #fff;
+		color: #111;
+		-webkit-transition: all .25s ease-in-out; /* Safari */
+    	transition: all .25s ease-in-out;
+	}
+	
+	.hard {
+		background-color: #111;
+		color: #eee;
+	}
+
+	.jumbotron {
+		-webkit-transition: all .25s ease-in-out; /* Safari */
+    	transition: all .25s ease-in-out;
+	}
+
+	.hard .jumbotron {
+		background-color: #222;
+	}
+	</style>
+</head>
+<body>
+	<div class="jumbotron center">
+    	<div class="container">
+        	<h1>This is vietnammese translator page.</h1>
+      	</div>
+    </div>
+    <div class="container">
+	    <div class="row">
+
+	    	<div class="col-xs-6">
+	    		<div class="form-group">
+				    <label>FROM</label>
+				    <textarea id="from" class="form-control" rows="5"></textarea>
+				</div>
+	    	</div>
+	    	<div class="col-xs-6">
+	    		<div class="form-group">
+				    <label>TO</label>
+				    <textarea id="to" class="form-control" rows="5"></textarea>
+				</div>
+	    	</div>
+	    </div>
+	</div>
+	<script>
+	(function(){
+		var from = document.getElementById("from");
+		var to = document.getElementById("to");
+
+		var hard = document.getElementById("hard");
+
+		from.oninput = function(){
+			to.value = vnnew(from.value);
+		}
+
+		function contain(arr, index){
+			for(var i in arr){
+				if(index>=arr[i][0] && index<=arr[i][0]+arr[i][1]) return true;
+			}
+			return false;
+		}
+		function vnnew(text){
+			var org = [
+				"Ch","Tr","Gi", "D", "R","Đ","Gh","G","Ph","Kh", "C","Q","K","Ngh","Ng","R","S","Th","Nh"
+			];
+			var des = [
+				"C", "C", "Z", "Z", "Z", "D", "G", "G", "F", "X", "K", "K", "K", "Q", "Q", "R", "S", "W", "N'"
+			];
+
+			var chars = "a-z0-9A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ";
+			var r_text = "";
+			for(var j in org){if(j>0){r_text+="|";} r_text+=org[j];}
+			var regex = "([^"+chars+"]*)(" + r_text + ")|(" + r_text +")([^"+chars+"]*)";//console.log(regex);
+
+			var re = new RegExp(regex,"giu");
+
+			return text.replace(re, function(x,y,z,p,q,r){
+				//console.log("x:"+x,"y:"+y,"z:"+z,"p:"+p,"q:"+q,"r:"+r);
+				z = p || z;
+				var str = z.match(new RegExp("["+chars+"]+","iu"));
+				if(str){
+					console.log(str);
+					str = str[0];
+					var lower = str[0] == str[0].toLocaleLowerCase();
+					for(var i in org){
+						if(str.toLocaleLowerCase()==org[i].toLocaleLowerCase()){return x.replace(str, lower?des[i].toLocaleLowerCase():des[i]);}
+					}
+				}
+				
+				return x;
+			});
+		}
+	})();
+	</script>
+</body>
+</html>
