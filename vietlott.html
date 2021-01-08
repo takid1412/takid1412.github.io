@@ -1,0 +1,182 @@
+<!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Vietlott</title>
+  
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <style>
+        .text-white-50 {
+          color: rgba(255, 255, 255, 0.5) !important;
+        }
+        .btn {
+          box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
+          padding: 1.25rem 2rem;
+          font-family: "Varela Round", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+          font-size: 80%;
+          text-transform: uppercase;
+          letter-spacing: 0.15rem;
+          border: 0;
+        }
+
+        .btn-primary {
+          color: #fff;
+          background-color: #64a19d;
+          border-color: #64a19d;
+        }
+        .btn-primary:hover {
+          color: #fff;
+          background-color: #548b87;
+          border-color: #4f837f;
+        }
+        .btn-primary:focus, .btn-primary.focus {
+          color: #fff;
+          background-color: #548b87;
+          border-color: #4f837f;
+          box-shadow: 0 0 0 0.2rem rgba(123, 175, 172, 0.5);
+        }
+        .btn-primary.disabled, .btn-primary:disabled {
+          color: #fff;
+          background-color: #64a19d;
+          border-color: #64a19d;
+        }
+        .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
+          color: #fff;
+          background-color: #4f837f;
+          border-color: #4a7b78;
+        }
+        .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus, .show > .btn-primary.dropdown-toggle:focus {
+          box-shadow: 0 0 0 0.2rem rgba(123, 175, 172, 0.5);
+        }
+
+        .masthead {
+          position: relative;
+          width: 100%;
+          height: auto;
+          min-height: 35rem;
+          padding: 15rem 0;
+          background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 75%, #000000 100%), url("https://2.pik.vn/2021375e6a8d-717d-405e-8755-3ac79bccf7ea.jpg");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-attachment: scroll;
+          background-size: cover;
+        }
+        .masthead h1 {
+          font-family: "Varela Round", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+          font-size: 2.5rem;
+          line-height: 2.5rem;
+          letter-spacing: 0.8rem;
+          background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+          -webkit-text-fill-color: transparent;
+          -webkit-background-clip: text;
+                  background-clip: text;
+        }
+        .masthead h2 {
+          max-width: 20rem;
+          font-size: 1rem;
+        }
+        @media (min-width: 768px) {
+          .masthead h1 {
+            font-size: 4rem;
+            line-height: 4rem;
+          }
+        }
+        @media (min-width: 992px) {
+          .masthead {
+            height: 100vh;
+            padding: 0;
+          }
+          .masthead h1 {
+            font-size: 6.5rem;
+            line-height: 6.5rem;
+            letter-spacing: 0.8rem;
+          }
+          .masthead h2 {
+            max-width: 30rem;
+            font-size: 1.25rem;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <header class="masthead">
+        <div class="container d-flex h-100 align-items-center">
+            <div class="mx-auto text-center">
+                <h1 class="mx-auto my-0 text-uppercase">You want some fun?</h1>
+                <h2 class="text-white-50 mx-auto mt-2 mb-5">Xã hội này cần cù bù siêng năng, có làm thì mới có ăn...</h2>
+                <div class="form-group">
+                  <input class="form-control w-25 mx-auto" type="text" id="number" placeholder="Today lucky number?">
+                </div>
+                <button class="btn btn-primary" id="gen">JUST DO IT!</button>
+                <div class="card text-left mt-5" style="min-height: 10em">
+                  <div class="card-body">
+                    <div class="card">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="card">
+                            <div class="card-body">
+                              <h5 class="card-title">POWER 6/55</h5>
+                              <p class="card-text text-success font-weight-bold" id="m55"></p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="card">
+                            <div class="card-body">
+                              <h5 class="card-title">POWER 6/45</h5>
+                              <p class="card-text text-success font-weight-bold" id="m45"></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </header>
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/random-js/1.0.8/random.min.js" integrity="sha512-C/21kASTZDv173aY5ERBPWuV9JVne9nhII/ZA7NIGhuPVCtGK5WnD6wzQ7dlQajXvu3003cojqouByxh+Fh3kg==" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script>
+        $(function(){
+          function getCustomNumber(){
+            var v = parseInt($("#number").val());
+            if(isNaN(v)) return 0;
+            if (v < 0) v = -v;
+            return v;
+          }
+          function random(max, custom){
+            var n_max = max + custom;
+            var random = new Random(Random.engines.mt19937().autoSeed());
+            var n = random.integer(1, 9000) % n_max;
+            return n%(max-1)+1;
+          }
+
+          function generate(max){
+            var c_num = getCustomNumber();
+            var res = [];
+            while (res.length < 6) {
+              var n = random(max, c_num);
+              if(res.indexOf(n) < 0){
+                res.push(n<10?"0"+n:n);
+              }
+            }
+            res.sort();
+            return res;
+          }
+          function buildNumbers(elem, num){
+            var res = generate(num);
+            elem.html(res.join(" - "));
+          }
+
+          $("#gen").click(function(){
+            buildNumbers($('#m55'), 55);
+            buildNumbers($('#m45'), 45);
+          });
+        });
+      </script>
+    </body>
+  </html>
