@@ -143,10 +143,20 @@
       <script>
         $(function(){
           function getCustomNumber(){
-            var v = parseInt($("#number").val());
-            if(isNaN(v)) return 0;
-            if (v < 0) v = -v;
-            return v;
+            var nums = [];
+            var v = 0;
+            $("#number").val().split(',').forEach(element => {
+              var i = parseInt(element.trim());
+              if(!isNaN(i)){
+                if (i < 0) i = -i;
+                v += i;
+                nums.push(i);
+              }
+            });
+            return {
+              n: v,
+              ns: nums
+            };
           }
           function random(max, custom){
             var n_max = max + custom;
@@ -156,17 +166,35 @@
           }
 
           function generate(max){
-            var c_num = getCustomNumber();
+            var c_res = getCustomNumber();
+            var c_n = c_res.n;
+            var c_ns = c_res.ns;
+
             var res = [];
+
+            c_ns.forEach(elem => {
+              if (elem > 0 && elem < max){
+                res.push(formatNumber(elem));
+              }
+            });
+
+            var begin = res.length;
+
             while (res.length < 6) {
-              var n = random(max, c_num);
-              if(res.indexOf(n) < 0){
-                res.push(n<10?"0"+n:n);
+              var n = random(max, c_n);
+              var val = formatNumber(n);
+              if(res.indexOf(val) < 0){
+                res.push(val);
               }
             }
             res.sort();
             return res;
           }
+
+          function formatNumber(n){
+            return n<10?"0"+n:n;
+          }
+
           function buildNumbers(elem, num){
             var res = generate(num);
             elem.html(res.join(" - "));
