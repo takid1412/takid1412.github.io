@@ -79,13 +79,12 @@
                     };
                 })();
         window.isDevice = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(((navigator.userAgent || navigator.vendor || window.opera)).toLowerCase()));
-        window.isDevice = false;
         
         function Star(id, x, y){
             this.id = id;
             this.x = x;
             this.y = y;
-            this.r = Math.floor(Math.random()*2)+.5;
+            this.r = Math.floor(Math.random()*2)+1;
             var alpha = (Math.floor(Math.random()*10)+1)/10/2;
             this.color = "rgba(255,255,255,"+alpha+")";
         }
@@ -150,7 +149,7 @@
                 initStars();
             });
         
-            var traceCount = mobile ? 20 : 50;
+            var traceCount = mobile ? 30 : 50;
             var pointsOrigin = [];
             var i;
             var dr = mobile ? 0.3 : 0.1;
@@ -180,7 +179,7 @@
                     q: ~~(rand() * heartPointsCount),
                     D: 2 * (i % 2) - 1,
                     force: 0.2 * rand() + 0.7,
-                    f: "hsla(0," + ~~(40 * rand() + 60) + "%," + ~~(60 * rand() + 20) + "%,.3)",
+                    f: "hsla(0," + ~~(40 * rand() + 60) + "%," + ~~(60 * rand() + 20) + "%,.9)",
                     trace: []
                 };
                 for (var k = 0; k < traceCount; k++) e[i].trace[k] = {x: x, y: y};
@@ -199,18 +198,6 @@
         //         ctx.fillStyle = "rgba(0,0,0,.1)";
         //         ctx.fillRect(0, 0, width, height);
                 ctx.clearRect(0, 0, width, height);
-        
-                ctx.save();
-                var text = "Hello world!"
-                var blur = 10;
-                var t_width = ctx.measureText(text).width + blur * 2;
-                ctx.textBaseline = "top"
-                ctx.shadowColor = "red"
-                ctx.shadowOffsetX = t_width;
-                ctx.shadowOffsetY = 0;
-                ctx.shadowBlur = blur;
-                ctx.fillText(text, -t_width, 0);
-                ctx.restore();
         
                 for (var i in stars) {
                     stars[i].move(ctx, height);
@@ -251,7 +238,7 @@
                     }
                     ctx.fillStyle = u.f;
                     for (k = 0; k < u.trace.length; k++) {
-                        ctx.fillRect(u.trace[k].x, u.trace[k].y, 1, 1);
+                        ctx.fillRect(u.trace[k].x, u.trace[k].y, 1.5, 1.5);
                     }
                 }
                 //ctx.fillStyle = "rgba(255,255,255,1)";
